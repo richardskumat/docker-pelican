@@ -1,0 +1,49 @@
+image: docker:stable
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  # https://gitlab.com/gitlab-org/gitlab-ce/issues/64959
+  # 19.03 had some breaking changes compared to 18.09
+  DOCKER_TLS_CERTDIR: ""
+
+services:
+  - docker:dind
+
+stages:
+  - build
+  - push
+
+before_script:
+  - docker info
+  - export DATE=$(date -u +"%Y-%m-%d-%H-%M-%S")
+
+build:
+  stage: build
+  script:
+    # https://docs.gitlab.com/ee/ci/variables/predefined_variables.html
+    - docker build -t $CI_COMMIT_SHORT_SHA:$CI_COMMIT_SHA .
+    - docker images
+
+push_to_dockerhub:
+ stage: push
+ only:
+   - master
+ script:
+   - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USER" --password-stdin
+   - docker build -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$CI_COMMIT_SHA -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$DATE .
+   - docker images
+   - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest
+   - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$CI_COMMIT_SHA
+   - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$DATE
+
+push_to_gitlab_reg:
+  stage: push
+  only:
+   - master
+  script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
+    - docker build -t $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest -t $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:$CI_COMMIT_SHA -t $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:$DATE .
+    - docker push $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest
+    - docker push $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:$CI_COMMIT_SHA
+    - docker push $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:$DATE
