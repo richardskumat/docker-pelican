@@ -8,8 +8,6 @@ env:
     - GITLAB_REG_URL: registry.gitlab.com
     - GITLAB_REG_USER: richardskumat
     - GITLAB_REG_IMAGE: docker-pelican
-    - DOCKER_TLS_CERTDIR: ''
-    - DOCKER_HOST: tcp://docker:2375/
   #matrix:
   #  - whatever
 
