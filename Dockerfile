@@ -7,9 +7,10 @@ RUN apt-get update && \
     python3-setuptools \
     python3-wheel \
     --no-install-recommends -y && \
-    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* /root/.cache && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* && \
     apt-get clean
-RUN pip3 install pelican Markdown typogrify Pillow Piexif
+RUN pip3 install pelican Markdown typogrify Pillow Piexif && \
+    rm -rf /root/.cache
 RUN useradd -m -s /bin/bash user
 USER user
 
