@@ -13,6 +13,7 @@ services:
 stages:
   - build
   - push
+  - test
 
 before_script:
   - docker info
@@ -47,3 +48,11 @@ push_to_gitlab_reg:
     - docker push $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest
     - docker push $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:$DATE
+
+test_docker_images:
+  stage: test
+  only:
+   - master
+  script:
+    - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$CI_COMMIT_SHA pelican --version
+    - docker run --rm $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:$CI_COMMIT_SHA pelican --version
