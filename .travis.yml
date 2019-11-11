@@ -22,4 +22,4 @@ script:
   # dockerhub
   - docker run --rm $DOCKER_USER/$DOCKER_IMAGE:latest pelican --version
   # gitlab
-  - docker run $GITLAB_REG_URL/$GITLAB_REG_USER/$GITLAB_REG_IMAGE:latest pelican --version
+  - docker run --rm $GITLAB_REG_URL/$GITLAB_REG_USER/$GITLAB_REG_IMAGE:latest pelican --version
