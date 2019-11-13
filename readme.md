@@ -9,8 +9,10 @@ The image uses the pelican plugin 'Photos' to resize photos.
 Example usage, if $PWD is the pelican project git root:
 
 ```
-docker run --rm -ti -v $PWD:/tmp/pelican-project qwe1/docker-pelican bash
+docker run -w /tmp/pelican-project --rm -ti -v $PWD:/tmp/pelican-project qwe1/docker-pelican bash
 ```
+
+-w changes the starting working directory to /tmp/pelican-project when the CT starts.
 
 ## Links to source code and build logs
 
