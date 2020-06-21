@@ -4,6 +4,7 @@ RUN apt-get update && \
     apt-get install python3-minimal \
     make \
     git \
+    ca-certificates \
     python3-pip \
     python3-setuptools \
     python3-wheel \
@@ -14,3 +15,4 @@ RUN pip3 install pelican=="${pelican_version}" Markdown typogrify Pillow Piexif 
     rm -rf /root/.cache
 RUN useradd -m -s /bin/bash user
 USER user
+CMD [ "bash" ]
