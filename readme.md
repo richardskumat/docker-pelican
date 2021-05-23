@@ -28,10 +28,6 @@ Github
 
 https://github.com/richardskumat/docker-pelican
 
-Travis
-
-https://travis-ci.org/richardskumat/docker-pelican
-
 Dockerhub
 
 https://hub.docker.com/r/qwe1/docker-pelican
