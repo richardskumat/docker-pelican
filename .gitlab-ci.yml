@@ -29,15 +29,15 @@ push_to_dockerhub:
    - master
  script:
    - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USER" --password-stdin
-   - docker build -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$CI_COMMIT_SHA -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$PELICAN_VERSION -t $CI_REGISTRY_IMAGE:latest -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA -t $CI_REGISTRY_IMAGE:$PELICAN_VERSION .
+   - docker build -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$CI_COMMIT_SHA -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$PELICAN_VERSION .
+   - docker build -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest-root -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$CI_COMMIT_SHA-root -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$PELICAN_VERSION-root .
    - docker images
    - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest
    - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$CI_COMMIT_SHA
    - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$PELICAN_VERSION
-   - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
-   - docker push $CI_REGISTRY_IMAGE:latest
-   - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-   - docker push $CI_REGISTRY_IMAGE:$PELICAN_VERSION
+   - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest-root
+   - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$CI_COMMIT_SHA-root
+   - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$PELICAN_VERSION-root
 
 test_docker_images:
   stage: test
@@ -45,4 +45,4 @@ test_docker_images:
    - master
   script:
     - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$CI_COMMIT_SHA pelican --version
-    - docker run --rm $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA pelican --version
+    - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$CI_COMMIT_SHA-root pelican --version
