@@ -21,6 +21,7 @@ build:
   script:
     # https://docs.gitlab.com/ee/ci/variables/predefined_variables.html
     - docker build -t $CI_COMMIT_SHORT_SHA:$CI_COMMIT_SHA .
+    - docker build -f Df-root -t $CI_COMMIT_SHORT_SHA-root:$CI_COMMIT_SHA-root .
     - docker images
 
 push_to_dockerhub:
