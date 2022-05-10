@@ -14,6 +14,8 @@ docker run -w /tmp/pelican-project --rm -ti -v $PWD:/tmp/pelican-project qwe1/do
 
 -w changes the starting working directory to /tmp/pelican-project when the CT starts.
 
+Has a version that runs as user 1000 and a separate root version.
+
 ## Links to source code and build logs
 
 Gitlab
