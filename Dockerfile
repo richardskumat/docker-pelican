@@ -1,5 +1,5 @@
 FROM debian:bullseye-slim
-ENV pelican_version=4.7.2
+ENV pelican_version=4.8.0
 RUN apt-get update && \
     apt-get install python3-minimal \
     make \
