@@ -10,6 +10,7 @@ RUN apt-get update && \
     python3-pip \
     python3-setuptools \
     python3-wheel \
+    python3-dev \
     libjpeg-dev \
     zlib1g-dev \
     gcc \
@@ -20,7 +21,7 @@ RUN python3 -m pip install --upgrade pip
 RUN pip3 install pelican=="${pelican_version}" Markdown typogrify Pillow Piexif && \
     rm -rf /root/.cache
 RUN useradd -m -s /bin/bash user
-RUN apt-get purge libjpeg-dev zlib1g-dev gcc -y && \
+RUN apt-get purge libjpeg-dev zlib1g-dev gcc python3-dev -y && \
     apt-get autoremove -y && \
     apt-get clean
 USER user
