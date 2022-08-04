@@ -11,5 +11,6 @@ RUN apt-get update && \
     --no-install-recommends -y && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* && \
     apt-get clean
+RUN python3 -m pip install --upgrade pip
 RUN pip3 install pelican=="${pelican_version}" Markdown typogrify Pillow Piexif && \
     rm -rf /root/.cache
