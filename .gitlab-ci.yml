@@ -63,5 +63,5 @@ test_docker_images:
   only:
    - master
   script:
-    - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$CI_COMMIT_SHA pelican --version
-    - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$CI_COMMIT_SHA-root pelican --version
+   - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest pelican --version
+   - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest-root pelican --version
