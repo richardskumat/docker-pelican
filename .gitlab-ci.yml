@@ -1,20 +1,42 @@
-image: docker:stable
+---
+#image: qwe1/debdocker:20.10
+image: crazymax/docker:latest
+services:
+  - name: docker:20.10-dind
+    command: ["--experimental"]
 
 variables:
+  # for some reason docker on gitlab throws context errors with these enabled
+  #DOCKER_HOST: tcp://docker:2376
+  #DOCKER_TLS_CERTDIR: "/certs"
   DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: "/certs"
+  #DOCKER_TLS_VERIFY: 1
+  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+  DOCKER_BUILDKIT: 1
+  DOCKER_CLI_EXPERIMENTAL: enabled
+  #BUILDX_URL: https://github.com/docker/buildx/releases/download/v0.4.1/buildx-v0.4.1.linux-amd64
 
-services:
-  - docker:dind
+before_script:
+  - mkdir -p $HOME/.docker/cli-plugins/
+  - docker buildx version
+  - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+  - "echo -e '{\n  \"experimental\": \"enabled\"\n}' | tee $HOME/.docker/config.json"
+  # https://gitlab.com/richardskumat/playground/-/jobs/2762899800
+  - docker context create whatever
+  - docker buildx create whatever
+  ##
+  - docker buildx create --use --driver docker-container --name whatever --platform=linux/amd64,linux/arm/v7,linux/arm64
+  - docker buildx inspect --bootstrap whatever
+  - docker buildx ls
+  - export PELICAN_VERSION="$(grep pelican_version= Dockerfile | awk -F'=' '{print $2}')"
+  - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USER" --password-stdin
+
 
 stages:
   - build
   - push
   - test
 
-before_script:
-  - docker info
-  - export PELICAN_VERSION="$(grep pelican_version= Dockerfile | awk -F'=' '{print $2}')"
 
 build:
   stage: build
