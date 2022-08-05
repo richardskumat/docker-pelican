@@ -54,7 +54,7 @@ push_to_registries:
    - master
  script:
    - docker buildx build --push -f Dockerfile -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$CI_COMMIT_SHA -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$PELICAN_VERSION --platform linux/amd64,linux/arm/v7,linux/arm64 .
-   - docker buildx build --push -f Dockerfile-root -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest-root -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$CI_COMMIT_SHA-root -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$PELICAN_VERSION-root --platform linux/amd64,linux/arm/v7,linux/arm64 .
+   - docker buildx build --push -f Df-root -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest-root -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$CI_COMMIT_SHA-root -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:$PELICAN_VERSION-root --platform linux/amd64,linux/arm/v7,linux/arm64 .
    - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest pelican --version
    - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest-root pelican --version
 
