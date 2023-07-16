@@ -1,5 +1,4 @@
-FROM debian:bullseye-slim
-ENV pelican_version=4.8.0
+FROM debian:bookworm-slim
 # https://github.com/python-pillow/Pillow/issues/4242
 # https://gitlab.com/richardskumat/docker-pelican/-/jobs/2816122458
 RUN apt-get update && \
@@ -17,9 +16,13 @@ RUN apt-get update && \
     --no-install-recommends -y && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* && \
     apt-get clean
-RUN python3 -m pip install --upgrade pip
+ENV pelican_version=4.8.0
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
+RUN rm -f /usr/lib/python3.11/EXTERNALLY-MANAGED && \
+    pip3 install --upgrade pip
 RUN pip3 install pelican=="${pelican_version}" Markdown typogrify Pillow Piexif && \
     rm -rf /root/.cache
 RUN apt-get purge libjpeg-dev zlib1g-dev gcc python3-dev -y && \
     apt-get autoremove -y && \
     apt-get clean
+CMD [ "bash" ]
